@@ -38,6 +38,6 @@ stages:
         repository: hub.docker.com
         username: chromosomerst
         password: ${DOCKER_PASSWORD}
-        tag: chromosomerst/fastapi-classifier:${GITEE_PIPELINE_BUILD_NUMBER}
+        tag: fastapi-classifier:v${GITEE_PIPELINE_BUILD_NUMBER}
         dockerfile: ./Dockerfile
         isCache: false
