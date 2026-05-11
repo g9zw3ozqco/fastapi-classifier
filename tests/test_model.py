@@ -1,6 +1,4 @@
 import torch
-import torchvision
-import torchvision.transforms as transforms
 import os
 import sys
 import pytest
@@ -25,17 +23,15 @@ def test_model_accuracy():
     model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
     model.eval()
 
-    # 3. 准备测试数据 (MNIST Test Set)
-    transform = transforms.Compose([
-        transforms.ToTensor(),
-        transforms.Normalize((0.5,), (0.5,))
-    ])
-    
-    # 只下载测试集进行验证。CI 中抽样一部分数据，避免云端执行过慢。
-    testset = torchvision.datasets.MNIST(root='./data', train=False, download=True, transform=transform)
-    subset_size = 2000
-    subset = torch.utils.data.Subset(testset, range(subset_size))
-    testloader = torch.utils.data.DataLoader(subset, batch_size=500, shuffle=False)
+    # 3. 读取仓库内固化的评估样本，避免 CI 运行时下载数据集
+    subset_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'ci_eval_subset.pt')
+    assert os.path.exists(subset_path), f"找不到评估样本文件：{subset_path}"
+    subset_payload = torch.load(subset_path, map_location=torch.device('cpu'))
+    images = subset_payload["images"]
+    labels = subset_payload["labels"]
+    subset_size = len(labels)
+    dataset = torch.utils.data.TensorDataset(images, labels)
+    testloader = torch.utils.data.DataLoader(dataset, batch_size=250, shuffle=False)
 
     correct = 0
     total = 0

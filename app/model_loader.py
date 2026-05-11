@@ -3,7 +3,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 import io
 from PIL import Image
-import torchvision.transforms as transforms
 
 # 简单的多层感知机（MLP），用于 MNIST 手写数字分类
 class SimpleNN(nn.Module):
@@ -19,13 +18,14 @@ class SimpleNN(nn.Module):
         return x
 
 model = None
-# MNIST 数据集的预处理流程
-transform = transforms.Compose([
-    transforms.Grayscale(num_output_channels=1),
-    transforms.Resize((28, 28)),
-    transforms.ToTensor(),
-    transforms.Normalize((0.5,), (0.5,))
-])
+
+def preprocess_image(image: Image.Image) -> torch.Tensor:
+    """将输入图片转换为模型需要的 1x1x28x28 张量。"""
+    image = image.convert("L").resize((28, 28))
+    pixel_values = torch.tensor(list(image.getdata()), dtype=torch.float32)
+    tensor = pixel_values.view(1, 28, 28) / 255.0
+    tensor = (tensor - 0.5) / 0.5
+    return tensor.unsqueeze(0)
 
 def load_model(model_path="model/model.pth"):
     """
@@ -51,7 +51,7 @@ def predict_image(image_bytes: bytes) -> int:
     image = Image.open(io.BytesIO(image_bytes))
     
     # 预处理
-    tensor = transform(image).unsqueeze(0)  # 增加 batch 维度: (1, 1, 28, 28)
+    tensor = preprocess_image(image)
     
     # 预测
     with torch.no_grad():

@@ -18,7 +18,9 @@ stages:
         displayName: run-tests
         pythonVersion: 3.9
         commands:
+          - python3 -V
           - python3 -m pip install --upgrade pip
           - pip3 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
-          - pip3 install -r requirements.txt
-          - pytest tests/ -v
+          - pip3 install --progress-bar off --retries 5 --timeout 120 -r requirements-ci.txt
+          - python3 -c "print('CI dependencies installed')"
+          - pytest tests/ -v -s
