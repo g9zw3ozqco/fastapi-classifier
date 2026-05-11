@@ -1,0 +1,37 @@
+version: '1.0'
+name: pipeline-fastapi-classifier
+displayName: fastapiclassifier
+triggers:
+  push:
+    - matchType: REGEX
+      branch: ^master$
+stages:
+  - name: test
+    displayName: 自动化测试阶段
+    strategy: naturally
+    trigger: auto
+    executor: []
+    steps:
+      - step: build@python
+        name: run-tests
+        displayName: 运行模型准确率验证和 API 测试
+        pythonVersion: 3.10
+        commands:
+          # 使用清华源加速依赖安装
+          - pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+          # 运行 pytest 进行测试，如果模型准确率低于要求（0.85）或 API 测试失败，流水线会在此中断
+          - pytest tests/ -v
+          
+  - name: deploy
+    displayName: Docker 构建与部署阶段
+    strategy: naturally
+    trigger: auto
+    executor: []
+    steps:
+      - step: build@docker
+        name: build-image
+        displayName: 构建并推送 Docker 镜像
+        dockerfile: Dockerfile
+        imageName: fastapi-classifier
+        imageTag: latest
+        # 实际部署时，这里可以配置推送到阿里云/腾讯云镜像仓库，并触发服务器的 docker pull & run
