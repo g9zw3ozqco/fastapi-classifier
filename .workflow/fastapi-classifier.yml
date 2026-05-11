@@ -2,54 +2,55 @@ version: '1.0'
 name: fastapi-classifier
 displayName: fastapi-classifier
 triggers:
-  trigger: auto
   push:
     branches:
       precise:
         - master
 stages:
   - stage:
-    name: test-stage
-    displayName: test-stage
-    strategy: naturally
-    trigger: auto
-    steps:
-      - step: build@python
-        name: run-tests
-        displayName: run-tests
-        pythonVersion: 3.9
-        commands:
-          - python -V
-          - python -m pip install --upgrade pip
-          - pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
-          - pip install --progress-bar off --retries 5 --timeout 120 -r requirements-ci.txt
-          - python -c "print('CI dependencies installed')"
-          - python -m pytest tests/ -v -s
-        artifacts:
-          - name: BUILD_ARTIFACT
-            path:
-              - ./
-  - name: stage-049aa243
-    displayName: docker-stage
-    strategy: naturally
-    trigger: auto
-    executor: []
-    steps:
-      - step: build@docker
-        name: build_docker
-        displayName: 镜像构建
-        type: account
-        repository: hub.docker.com
-        username: chromosomerst
-        password: xjklmysbjtqqyhy1
-        tag: fastapi-classifier:v1.${GITEE_PIPELINE_BUILD_NUMBER}
-        dockerfile: ./Dockerfile
-        context: ''
-        artifacts: []
-        isCache: false
-        processorType:
-          - amd64
-        parameter: {}
-        notify: []
-        strategy:
-          retry: '0'
+      name: test-stage
+      displayName: test-stage
+      strategy: naturally
+      trigger: auto
+      steps:
+        - step: build@python
+          name: run-tests
+          displayName: run-tests
+          pythonVersion: 3.9
+          commands:
+            - python -V
+            - python -m pip install --upgrade pip
+            - pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+            - pip install --progress-bar off --retries 5 --timeout 120 -r requirements-ci.txt
+            - python -c "print('CI dependencies installed')"
+            - python -m pytest tests/ -v -s
+          artifacts:
+            - name: BUILD_ARTIFACT
+              path:
+                - ./
+  - stage:
+      name: docker-stage
+      displayName: docker-stage
+      strategy: naturally
+      trigger: auto
+      needs:
+        - test-stage
+      steps:
+        - step: build@docker
+          name: build_docker
+          displayName: 镜像构建
+          type: account
+          repository: hub.docker.com
+          username: chromosomerst
+          password: xjklmysbjtqqyhy1
+          tag: fastapi-classifier:v1.${GITEE_PIPELINE_BUILD_NUMBER}
+          dockerfile: ./Dockerfile
+          context: ./
+          artifacts: []
+          isCache: false
+          processorType:
+            - amd64
+          parameter: {}
+          notify: []
+          strategy:
+            retry: '0'
