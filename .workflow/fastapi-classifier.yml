@@ -34,21 +34,14 @@ stages:
     trigger: auto
     executor: []
     steps:
-      - step: build@python
-        name: clean-cache
-        displayName: 清理缓存
-        pythonVersion: 3.9
-        commands:
-          - docker system prune -f || true
-          - cat Dockerfile
       - step: build@docker
         name: build_docker
         displayName: 镜像构建
         type: account
-        repository: hub.docker.com
-        username: chromosomerst
-        password: xjklmysbjtqqyhy1
-        tag: fastapi-classifier:v1.${GITEE_PIPELINE_BUILD_NUMBER}
+        repository: registry.gitee.com
+        username: ruan-shunting
+        password: YOUR_GITEE_PASSWORD_OR_TOKEN
+        tag: ruan-shunting/fastapi-classifier:v1.${GITEE_PIPELINE_BUILD_NUMBER}
         dockerfile: ./Dockerfile
         context: ''
         artifacts: []
