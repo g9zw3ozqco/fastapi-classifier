@@ -33,9 +33,9 @@ stages:
       - step: build@docker
         name: build-image
         displayName: build-image
-        repository: ${DOCKER_REPOSITORY}
-        username: ${DOCKER_USERNAME}
+        repository: docker.io
+        username: chromosomerst
         password: ${DOCKER_PASSWORD}
-        tag: fastapi-classifier:${GITEE_PIPELINE_BUILD_NUMBER}
+        tag: chromosomerst/fastapi-classifier:${GITEE_PIPELINE_BUILD_NUMBER}
         dockerfile: ./Dockerfile
         isCache: false
