@@ -19,5 +19,6 @@ coverage.xml
 
 # Project specific
 model/*.pth
+!model/model.pth
 data/*
 !data/.gitkeep

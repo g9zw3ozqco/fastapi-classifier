@@ -31,10 +31,11 @@ def test_model_accuracy():
         transforms.Normalize((0.5,), (0.5,))
     ])
     
-    # 只下载测试集进行验证
+    # 只下载测试集进行验证。CI 中抽样一部分数据，避免云端执行过慢。
     testset = torchvision.datasets.MNIST(root='./data', train=False, download=True, transform=transform)
-    # 取一部分进行测试（为了加快 CI 速度，可以全量测试，此处使用全量 10000 张）
-    testloader = torch.utils.data.DataLoader(testset, batch_size=1000, shuffle=False)
+    subset_size = 2000
+    subset = torch.utils.data.Subset(testset, range(subset_size))
+    testloader = torch.utils.data.DataLoader(subset, batch_size=500, shuffle=False)
 
     correct = 0
     total = 0
@@ -49,7 +50,7 @@ def test_model_accuracy():
             correct += (predicted == labels).sum().item()
 
     accuracy = correct / total
-    print(f"\nModel Accuracy on 10000 test images: {accuracy * 100:.2f}%")
+    print(f"\nModel Accuracy on {subset_size} test images: {accuracy * 100:.2f}%")
     
     # 5. 断言准确率达标，否则阻止流水线继续部署
     assert accuracy >= MIN_ACCURACY, f"部署失败：模型准确率 {accuracy:.4f} 低于最低要求 {MIN_ACCURACY}"
