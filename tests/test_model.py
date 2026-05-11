@@ -9,10 +9,10 @@ from app.model_loader import SimpleNN
 def test_model_accuracy():
     """
     自动化测试：验证模型的准确率是否符合部署标准
-    要求：在测试集上的准确率不得低于 0.85
-    （注：为了演示快速运行，我们设置 0.85，因为上面只训练了 1 个 Epoch）
+    当前基准准确率：93.80%（基于已训练模型在测试集上的表现）
+    新模型准确率不得低于此基准值，否则阻止部署
     """
-    MIN_ACCURACY = 0.85 
+    MIN_ACCURACY = 0.938  # 当前模型准确率基准值
     model_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'model', 'model.pth')
     
     # 1. 确保模型文件存在
