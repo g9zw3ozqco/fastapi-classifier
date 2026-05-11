@@ -34,6 +34,13 @@ stages:
     trigger: auto
     executor: []
     steps:
+      - step: build@python
+        name: clean-cache
+        displayName: 清理缓存
+        pythonVersion: 3.9
+        commands:
+          - docker system prune -f || true
+          - cat Dockerfile
       - step: build@docker
         name: build_docker
         displayName: 镜像构建
