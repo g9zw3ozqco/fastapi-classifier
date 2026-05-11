@@ -1,4 +1,4 @@
-FROM registry.cn-hangzhou.aliyuncs.com/library/python:3.10-slim
+FROM docker.m.daocloud.io/python:3.10-slim
 
 WORKDIR /app
 
