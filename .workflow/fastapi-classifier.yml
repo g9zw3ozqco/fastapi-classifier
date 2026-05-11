@@ -8,8 +8,7 @@ triggers:
       precise:
         - master
 stages:
-  - stage:
-    name: test-stage
+  - name: test-stage
     displayName: test-stage
     strategy: naturally
     trigger: auto
