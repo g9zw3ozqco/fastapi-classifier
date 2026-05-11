@@ -1,0 +1,25 @@
+version: '1.0'
+name: fastapi-classifier
+displayName: fastapi-classifier
+triggers:
+  push:
+    branches:
+      precise:
+        - master
+stages:
+  - stage:
+    name: test-stage
+    displayName: test-stage
+    strategy: naturally
+    trigger: auto
+    steps:
+      - step: build@python
+        name: run-tests
+        displayName: run-tests
+        pythonVersion: 3.9
+        commands:
+          - python3 -m pip install --upgrade pip
+          - pip3 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+          - pip3 install -r requirements.txt
+          - python3 model/train.py
+          - pytest tests/ -v
