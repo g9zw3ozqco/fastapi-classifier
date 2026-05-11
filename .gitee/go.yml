@@ -24,6 +24,10 @@ stages:
           - pip3 install --progress-bar off --retries 5 --timeout 120 -r requirements-ci.txt
           - python3 -c "print('CI dependencies installed')"
           - python3 -m pytest tests/ -v -s
+        artifacts:
+          - name: BUILD_ARTIFACT
+            path:
+              - ./
   - stage:
     name: docker-stage
     displayName: docker-stage
@@ -38,4 +42,6 @@ stages:
         password: dockerhub_password
         tag: fastapi-classifier:v1.${GITEE_PIPELINE_BUILD_NUMBER}
         dockerfile: ./Dockerfile
+        artifacts:
+          - ${BUILD_ARTIFACT}
         isCache: false
