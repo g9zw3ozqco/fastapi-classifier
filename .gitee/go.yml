@@ -1,34 +1,34 @@
 version: '1.0'
-name: pipeline-fastapi-classifier
-displayName: fastapiclassifier
+name: fastapi-classifier
+displayName: fastapi-classifier
 triggers:
   push:
     - matchType: REGEX
       branch: ^master$
 stages:
-  - name: test
-    displayName: 自动化测试阶段
+  - name: test-stage
+    displayName: test-stage
     strategy: naturally
     trigger: auto
     executor: []
     steps:
       - step: build@python
         name: run-tests
-        displayName: 运行模型准确率验证和 API 测试
-        pythonVersion: 3.10
+        displayName: run-tests
+        pythonVersion: '3.10'
         commands:
           - pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
           - pytest tests/ -v
           
-  - name: deploy
-    displayName: Docker 构建与部署阶段
+  - name: docker-stage
+    displayName: docker-stage
     strategy: naturally
     trigger: auto
     executor: []
     steps:
       - step: build@docker
         name: build-image
-        displayName: 构建并推送 Docker 镜像
+        displayName: build-image
         dockerfile: Dockerfile
         imageName: fastapi-classifier
         imageTag: latest
