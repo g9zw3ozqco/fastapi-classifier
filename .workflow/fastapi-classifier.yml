@@ -24,3 +24,4 @@ stages:
           - pip3 install --progress-bar off --retries 5 --timeout 120 -r requirements-ci.txt
           - python3 -c "print('CI dependencies installed')"
           - pytest tests/ -v -s
+
