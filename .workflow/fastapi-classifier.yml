@@ -2,13 +2,13 @@ version: '1.0'
 name: fastapi-classifier
 displayName: fastapi-classifier
 triggers:
+  trigger: auto
   push:
     branches:
       precise:
         - master
 stages:
-  - stage:
-    name: test-stage
+  - name: test-stage
     displayName: test-stage
     strategy: naturally
     trigger: auto
