@@ -24,3 +24,18 @@ stages:
           - pip3 install --progress-bar off --retries 5 --timeout 120 -r requirements-ci.txt
           - python3 -c "print('CI dependencies installed')"
           - python3 -m pytest tests/ -v -s
+  - stage:
+    name: docker-stage
+    displayName: docker-stage
+    strategy: naturally
+    trigger: auto
+    steps:
+      - step: build@docker
+        name: build-image
+        displayName: build-image
+        repository: ${DOCKER_REPOSITORY}
+        username: ${DOCKER_USERNAME}
+        password: ${DOCKER_PASSWORD}
+        tag: fastapi-classifier:${GITEE_PIPELINE_BUILD_NUMBER}
+        dockerfile: ./Dockerfile
+        isCache: false
