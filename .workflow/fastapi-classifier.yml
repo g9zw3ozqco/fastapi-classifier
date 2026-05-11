@@ -1,0 +1,30 @@
+version: '1.0'
+name: fastapi-classifier
+displayName: fastapi-classifier
+triggers:
+  push:
+    branches:
+      precise:
+        - master
+stages:
+  - stage:
+    name: test-stage
+    displayName: test-stage
+    strategy: naturally
+    trigger: auto
+    steps:
+      - step: build@python
+        name: run-tests
+        displayName: run-tests
+        pythonVersion: 3.9
+        commands:
+          - python -V
+          - python -m pip install --upgrade pip
+          - pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+          - pip install --progress-bar off --retries 5 --timeout 120 -r requirements-ci.txt
+          - python -c "print('CI dependencies installed')"
+          - python -m pytest tests/ -v -s
+        artifacts:
+          - name: BUILD_ARTIFACT
+            path:
+              - ./

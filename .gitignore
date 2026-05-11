@@ -1,0 +1,27 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.pytest_cache/
+.sync-repo/
+.sync-repo-2/
+
+# Project specific
+model/*.pth
+!model/model.pth
+data/*
+!data/ci_eval_subset.pt
+!data/.gitkeep
