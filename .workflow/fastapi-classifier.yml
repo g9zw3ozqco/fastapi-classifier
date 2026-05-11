@@ -1,6 +1,8 @@
 version: '1.0'
 name: fastapi-classifier
 displayName: fastapi-classifier
+variables:
+  DOCKER_PASSWORD: PLEASE_SET_IN_GITEE
 triggers:
   push:
     branches:
@@ -33,7 +35,7 @@ stages:
       - step: build@docker
         name: build-image
         displayName: build-image
-        repository: docker.io
+        repository: hub.docker.com
         username: chromosomerst
         password: ${DOCKER_PASSWORD}
         tag: chromosomerst/fastapi-classifier:${GITEE_PIPELINE_BUILD_NUMBER}
