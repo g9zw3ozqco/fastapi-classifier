@@ -37,10 +37,10 @@ stages:
         name: build_docker
         displayName: 镜像构建
         type: account
-        repository: ccr.ccs.tencentyun.com
-        username: 100041167847
-        password: xjkllmysbjtqqyhy1
-        tag: ruan-shunting/fastapi-classifier:v1.${GITEE_PIPELINE_BUILD_NUMBER}
+        repository: hub.docker.com
+        username: chromosomerst
+        password: xjklmysbjtqqyhy1
+        tag: chromosomerst/fastapi-classifier:v1.${GITEE_PIPELINE_BUILD_NUMBER}
         dockerfile: ./Dockerfile
         context: ''
         artifacts: []
