@@ -6,6 +6,7 @@ triggers:
     branches:
       precise:
         - master
+        - main
 stages:
   - stage:
     name: test-stage
@@ -28,3 +29,16 @@ stages:
           - name: BUILD_ARTIFACT
             path:
               - ./
+  - stage:
+    name: docker-stage
+    displayName: docker-stage
+    strategy: naturally
+    trigger: auto
+    steps:
+      - step: build@custom
+        name: docker-build
+        displayName: docker-build
+        image: docker:24.0.7
+        commands:
+          - docker version
+          - docker build -t fastapi-classifier .
