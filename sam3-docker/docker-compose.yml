@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  sam3:
+    build: .
+    container_name: sam3-container
+    ports:
+      - "8888:8888"
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./notebooks:/app/notebooks
+      - ./models:/app/models
+    environment:
+      - PYTHONPATH=/app
+      - HF_TOKEN=${HF_TOKEN:-}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    shm_size: '8gb'
+    stdin_open: true
+    tty: true
