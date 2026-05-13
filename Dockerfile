@@ -1,4 +1,4 @@
-FROM registry.cn-hangzhou.aliyuncs.com/library/python:3.10-slim
+FROM swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/library/python:3.10-slim
 
 WORKDIR /app
 
