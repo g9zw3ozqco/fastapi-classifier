@@ -1,4 +1,4 @@
-FROM ccr.ccs.tencentyun.com/library/python:3.10-slim
+FROM m.daocloud.io/library/python:3.10-slim
 
 WORKDIR /app
 
