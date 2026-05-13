@@ -1,4 +1,4 @@
-FROM mirror.ccs.tencentyun.com/library/python:3.10-slim
+FROM ccr.ccs.tencentyun.com/library/python:3.10-slim
 
 WORKDIR /app
 
