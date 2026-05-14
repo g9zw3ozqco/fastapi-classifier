@@ -19,8 +19,8 @@ inputs:
 
 任务：
 1) 先阅读当前训练与模型代码。
-2) 提出与 {{goal}} 一致的模型或训练改进方案。
-3) 在 model/train.py 实现改动（如需可改相关文件）。
+2) 提出与 {{goal}} 一致的“模型结构/算法”改进方案（训练流程保持不变）。
+3) 在 app/model_loader.py 中更新模型结构；必要时同步到 model/train.py 的模型创建逻辑。
 4) 推理行为需保持与 app/model_loader.py 兼容。
 5) 若准确率基线变化，更新 tests/test_model.py 并说明新阈值。
 
